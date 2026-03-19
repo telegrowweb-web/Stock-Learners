@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Stock Learners – Index Options Specialist</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green: #00cfff;
+      --green2: #1565c0;
+      --dark: #040d1a;
+      --card: rgba(255,255,255,0.04);
+      --border: rgba(0,180,255,0.22);
+      --text: #e3f2fd;
+      --muted: #7aabcc;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      background: var(--dark);
+      font-family: 'Outfit', sans-serif;
+      color: var(--text);
+    }
+
+    /* Animated grid bg */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,180,255,0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,180,255,0.07) 1px, transparent 1px);
+      background-size: 40px 40px;
+      animation: gridMove 20s linear infinite;
+      z-index: 0;
+    }
+    @keyframes gridMove {
+      0%   { background-position: 0 0; }
+      100% { background-position: 40px 40px; }
+    }
+
+    /* Glow orbs */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(90px);
+      z-index: 0;
+      pointer-events: none;
+    }
+    .orb1 { width: 420px; height: 420px; background: rgba(0,230,118,0.12); top: -100px; left: -80px; animation: orbFloat 8s ease-in-out infinite alternate; }
+    .orb2 { width: 300px; height: 300px; background: rgba(0,200,83,0.10); bottom: -80px; right: -60px; animation: orbFloat 10s ease-in-out infinite alternate-reverse; }
+    @keyframes orbFloat {
+      0%   { transform: translate(0,0) scale(1); }
+      100% { transform: translate(30px, 30px) scale(1.1); }
+    }
+
+    /* Ticker tape */
+    .ticker-wrap {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 34px;
+      background: rgba(0,230,118,0.10);
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+    }
+    .ticker {
+      display: flex;
+      gap: 60px;
+      white-space: nowrap;
+      animation: ticker 22s linear infinite;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--green);
+      letter-spacing: 0.06em;
+    }
+    @keyframes ticker {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .ticker span { color: var(--muted); margin-left: 4px; }
+
+    /* Main wrapper */
+    .page {
+      position: relative;
+      z-index: 1;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 54px 20px 28px;
+      gap: 0;
+    }
+
+    /* Logo + badge row */
+    .top-row {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      animation: fadeUp 0.7s ease both;
+    }
+    .logo-ring {
+      width: 82px; height: 82px;
+      border-radius: 50%;
+      border: 2px solid var(--green);
+      box-shadow: 0 0 24px rgba(0,230,118,0.35), 0 0 60px rgba(0,230,118,0.12);
+      overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+      background: #fff;
+    }
+    .logo-ring img { width: 100%; height: 100%; object-fit: cover; }
+
+    .badge {
+      background: rgba(0,230,118,0.12);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 4px 14px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--green);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* Heading */
+    .heading-wrap {
+      margin-top: 14px;
+      text-align: center;
+      animation: fadeUp 0.7s 0.15s ease both;
+    }
+    h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(38px, 9vw, 68px);
+      letter-spacing: 0.04em;
+      line-height: 1;
+      color: #fff;
+      text-shadow: 0 0 40px rgba(0,230,118,0.3);
+    }
+    h1 em {
+      font-style: normal;
+      color: var(--green);
+      text-shadow: 0 0 30px rgba(0,230,118,0.6);
+    }
+    .sub {
+      margin-top: 8px;
+      font-size: clamp(13px, 2.5vw, 15px);
+      color: var(--muted);
+      font-weight: 400;
+      letter-spacing: 0.02em;
+    }
+
+    /* Feature pills */
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 18px;
+      animation: fadeUp 0.7s 0.3s ease both;
+    }
+    .pill {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 7px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px var(--green); flex-shrink: 0; }
+
+    /* Stats row */
+    .stats {
+      display: flex;
+      gap: 20px;
+      margin-top: 18px;
+      animation: fadeUp 0.7s 0.45s ease both;
+    }
+    .stat {
+      text-align: center;
+    }
+    .stat-val {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 26px;
+      color: var(--green);
+      letter-spacing: 0.04em;
+    }
+    .stat-label {
+      font-size: 10px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .divider { width: 1px; background: var(--border); align-self: stretch; }
+
+    /* CTA */
+    .cta-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin-top: 22px;
+      animation: fadeUp 0.7s 0.6s ease both;
+      width: 100%;
+      max-width: 340px;
+    }
+
+    .btn-primary {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 15px 28px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--green), var(--green2));
+      color: #021a09;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 16px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 6px 30px rgba(0,230,118,0.35);
+      animation: pulse 2.2s ease-in-out infinite;
+      transition: box-shadow 0.2s;
+    }
+    .btn-primary:hover {
+      box-shadow: 0 8px 40px rgba(0,230,118,0.55);
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50%       { transform: scale(1.045); }
+    }
+
+    .btn-secondary {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 13px 28px;
+      border-radius: 12px;
+      background: transparent;
+      border: 1.5px solid var(--border);
+      color: var(--text);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      animation: pulseSecondary 2.8s ease-in-out infinite;
+    }
+    .btn-secondary:hover {
+      border-color: var(--green);
+      background: rgba(0,230,118,0.06);
+    }
+    @keyframes pulseSecondary {
+      0%, 100% { transform: scale(1); }
+      50%       { transform: scale(1.035); }
+    }
+
+    /* Telegram icon inline svg */
+    .tg-icon { width: 20px; height: 20px; flex-shrink: 0; }
+
+    /* Credit */
+    .credit {
+      position: fixed;
+      bottom: 12px;
+      left: 0; right: 0;
+      text-align: center;
+      font-size: 11px;
+      color: var(--muted);
+      z-index: 10;
+      letter-spacing: 0.03em;
+    }
+    .credit a {
+      color: var(--green);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .credit a:hover { text-decoration: underline; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Mobile tweaks */
+    @media (max-width: 400px) {
+      .logo-ring { width: 68px; height: 68px; }
+      .pills { gap: 6px; }
+      .pill { font-size: 11px; padding: 6px 10px; }
+      .stats { gap: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+
+  <!-- Ticker -->
+  <div class="ticker-wrap">
+    <div class="ticker">
+      <span>NIFTY 50 ▲ 0.62%</span><span>BANKNIFTY ▲ 0.91%</span><span>FINNIFTY ▲ 0.47%</span>
+      <span>SENSEX ▲ 0.55%</span><span>MIDCAP ▲ 1.12%</span><span>NIFTY IT ▲ 0.38%</span>
+      <!-- duplicate for seamless loop -->
+      <span>NIFTY 50 ▲ 0.62%</span><span>BANKNIFTY ▲ 0.91%</span><span>FINNIFTY ▲ 0.47%</span>
+      <span>SENSEX ▲ 0.55%</span><span>MIDCAP ▲ 1.12%</span><span>NIFTY IT ▲ 0.38%</span>
+    </div>
+  </div>
+
+  <main class="page">
+
+    <!-- Logo + badge -->
+    <div class="top-row">
+      <div class="logo-ring">
+        <img src="https://fantasticczone.site/wp-content/uploads/2026/03/stodew.jpg" alt="Stock Learners Logo" onerror="this.style.display='none'; this.parentElement.style.background='#0a2a14'; this.parentElement.innerHTML='<span style=\'font-family:Bebas Neue,sans-serif;font-size:24px;color:#00e676\'>SL</span>'"/>
+      </div>
+      <div class="badge">✦ Official Channel</div>
+    </div>
+
+    <!-- Heading -->
+    <div class="heading-wrap">
+      <h1>STOCK <em>LEARNERS</em></h1>
+      <p class="sub">India's Index Options Specialist — Trade Smart, Win Big</p>
+    </div>
+
+    <!-- Pills -->
+    <div class="pills">
+      <div class="pill"><div class="dot"></div>BankNifty Options</div>
+      <div class="pill"><div class="dot"></div>Nifty Options</div>
+      <div class="pill"><div class="dot"></div>FinNifty Trades</div>
+      <div class="pill"><div class="dot"></div>Jackpot Calls</div>
+      <div class="pill"><div class="dot"></div>Account Handling</div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-val">100%</div>
+        <div class="stat-label">Index Focus</div>
+      </div>
+      <div class="divider"></div>
+      <div class="stat">
+        <div class="stat-val">3</div>
+        <div class="stat-label">Instruments</div>
+      </div>
+      <div class="divider"></div>
+      <div class="stat">
+        <div class="stat-val">FREE</div>
+        <div class="stat-label">To Join</div>
+      </div>
+    </div>
+
+    <!-- CTAs -->
+    <div class="cta-wrap">
+      <a href="https://t.me/+a5qu1Tcbgb00ZWI1" target="_blank" rel="noopener" class="btn-primary">
+        <svg class="tg-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.069l-2.04 9.608c-.15.673-.546.837-1.107.52l-3.062-2.255-1.478 1.423c-.164.164-.3.3-.615.3l.219-3.108 5.655-5.108c.246-.218-.053-.34-.38-.12L7.27 14.078l-3.013-.94c-.655-.204-.668-.655.137-.969l11.753-4.53c.546-.2 1.024.133.847.93l-.432-.5z" fill="#021a09"/>
+        </svg>
+        Join Telegram Channel
+      </a>
+      <a href="https://t.me/+a5qu1Tcbgb00ZWI1" target="_blank" rel="noopener" class="btn-secondary">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+        Start Learning Now
+      </a>
+    </div>
+
+  </main>
+
+  <p class="credit">Ads by <a href="https://t.me/+TRlJl628l-FkMWE9" target="_blank" rel="noopener">@Nexgroww_agency</a></p>
+
+</body>
+</html>
