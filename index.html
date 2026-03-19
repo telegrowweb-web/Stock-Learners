@@ -321,25 +321,54 @@
     }
     /* Mobile tweaks */
     @media (max-width: 480px) {
-      html, body { overflow: hidden; }
-      .page { padding: 60px 16px 40px; justify-content: flex-start; }
-      .top-row { margin-top: 24px; }
-      .logo-ring { width: 100px; height: 100px; }
-      h1 { font-size: 42px; }
-      .sub { font-size: 13px; }
-      .pills { gap: 6px; margin-top: 14px; }
-      .pill { font-size: 11px; padding: 6px 10px; }
-      .stats { gap: 16px; margin-top: 16px; }
-      .stat-val { font-size: 22px; }
-      .cta-wrap { margin-top: 18px; gap: 10px; }
-      .btn-primary { font-size: 14px; padding: 13px 20px; }
-      .btn-secondary { font-size: 13px; padding: 11px 20px; }
-      .heading-wrap { margin-top: 14px; }
+      html, body { overflow-y: auto; }
+      .page { 
+        padding: 62px 20px 50px; 
+        justify-content: flex-start; 
+        gap: 0;
+      }
+      .top-row { margin-top: 28px; gap: 12px; }
+      .logo-ring { width: 108px; height: 108px; }
+      .badge { font-size: 11px; padding: 5px 14px; }
+
+      .heading-wrap { margin-top: 20px; }
+      h1 { font-size: 40px; line-height: 1.05; }
+      .sub { font-size: 13px; margin-top: 10px; line-height: 1.6; }
+
+      .pills { gap: 7px; margin-top: 18px; padding: 0 4px; }
+      .pill { font-size: 11.5px; padding: 7px 12px; }
+
+      .stats { gap: 18px; margin-top: 20px; }
+      .stat-val { font-size: 24px; }
+      .stat-label { font-size: 10px; }
+
+      .cta-wrap { 
+        margin-top: 24px; 
+        gap: 14px; 
+        width: 100%; 
+        max-width: 100%;
+        padding: 0 4px;
+      }
+      .btn-primary { 
+        font-size: 15px; 
+        padding: 16px 24px; 
+        border-radius: 14px;
+        width: 100%;
+      }
+      .btn-secondary { 
+        font-size: 14px; 
+        padding: 14px 24px; 
+        border-radius: 14px;
+        width: 100%;
+      }
+      .credit { font-size: 12px; bottom: 14px; }
     }
     @media (max-width: 360px) {
-      .logo-ring { width: 86px; height: 86px; }
-      h1 { font-size: 36px; }
-      .pill { font-size: 10px; padding: 5px 8px; }
+      .logo-ring { width: 90px; height: 90px; }
+      h1 { font-size: 34px; }
+      .pill { font-size: 10.5px; padding: 6px 10px; }
+      .btn-primary { font-size: 14px; padding: 14px 20px; }
+      .btn-secondary { font-size: 13px; padding: 12px 20px; }
     }
   </style>
 </head>
